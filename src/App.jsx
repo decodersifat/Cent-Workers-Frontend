@@ -1,5 +1,6 @@
 import React from 'react'
 import Navbar from './components/Navbar'
+import RecentJob from './components/RecentJob';
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
           Connect with talented professionals and grow your business today.
         </p>
       </div>
+      <RecentJob/>
     </div>
   )
 }

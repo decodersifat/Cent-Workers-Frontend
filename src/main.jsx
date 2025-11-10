@@ -5,6 +5,7 @@ import App from './App.jsx'
 import Login from './pages/Login.jsx'
 import Register from './pages/Register.jsx'
 import AddJob from './pages/AddJob.jsx'
+import JobDetails from './pages/JobDetails'
 import AuthProvider from './contexts/AuthProvider.jsx'
 import { createBrowserRouter } from "react-router";
 import { RouterProvider } from "react-router/dom";
@@ -26,6 +27,10 @@ const router = createBrowserRouter([
   {
     path: "/add-job",
     element: <AddJob />,
+  },
+  {
+    path: "/job-details",
+    element: <JobDetails />,
   },
 ]);
 

@@ -158,7 +158,9 @@ export default function AddJob() {
                 </div>
               </div>
 
-              {/* Posted By */}
+
+
+ 
               <div className="space-y-2">
                 <Label htmlFor="postedBy">Posted By (Name/Company) *</Label>
                 <div className="relative">
