@@ -1,9 +1,12 @@
 import React, { useState } from "react"
+import { useNavigate } from "react-router"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { User, Mail, Lock, Eye, EyeOff } from "lucide-react"
+import useAuth from "@/hooks/useAuth"
+import { updateProfile } from "firebase/auth"
 
 export default function Register() {
   const [showPassword, setShowPassword] = useState(false)
@@ -14,20 +17,58 @@ export default function Register() {
     password: "",
     confirmPassword: ""
   })
+  const [error, setError] = useState("")
+  const [loading, setLoading] = useState(false)
+  
+  const { createUser, signInWithGoogle } = useAuth()
+  const navigate = useNavigate()
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
+    setError("")
+    
     if (formData.password !== formData.confirmPassword) {
-      alert("Passwords do not match!")
+      setError("Passwords do not match!")
       return
     }
-    console.log("Register data:", formData)
-    // Add your registration logic here
+    
+    if (formData.password.length < 6) {
+      setError("Password must be at least 6 characters long!")
+      return
+    }
+    
+    setLoading(true)
+    
+    try {
+      const userCredential = await createUser(formData.email, formData.password)
+      // Update user profile with name
+      await updateProfile(userCredential.user, {
+        displayName: formData.name
+      })
+      console.log("Registration successful!")
+      navigate("/") // Redirect to home page after successful registration
+    } catch (err) {
+      console.error("Registration error:", err)
+      setError(err.message || "Failed to create account. Please try again.")
+    } finally {
+      setLoading(false)
+    }
   }
 
-  const handleGoogleSignup = () => {
-    console.log("Google signup clicked")
-    // Add your Google OAuth logic here
+  const handleGoogleSignup = async () => {
+    setError("")
+    setLoading(true)
+    
+    try {
+      await signInWithGoogle()
+      console.log("Google signup successful!")
+      navigate("/") // Redirect to home page after successful signup
+    } catch (err) {
+      console.error("Google signup error:", err)
+      setError(err.message || "Failed to sign up with Google.")
+    } finally {
+      setLoading(false)
+    }
   }
 
   const handleChange = (e) => {
@@ -49,8 +90,14 @@ export default function Register() {
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
+          {error && (
+            <div className="bg-destructive/10 border border-destructive/20 text-destructive px-4 py-3 rounded-md text-sm">
+              {error}
+            </div>
+          )}
+          
           <form onSubmit={handleSubmit} className="space-y-4">
-            {/* Name Field */}
+
             <div className="space-y-2">
               <Label htmlFor="name">Full Name</Label>
               <div className="relative">
@@ -68,7 +115,7 @@ export default function Register() {
               </div>
             </div>
 
-            {/* Email Field */}
+
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
               <div className="relative">
@@ -86,7 +133,7 @@ export default function Register() {
               </div>
             </div>
 
-            {/* Password Field */}
+
             <div className="space-y-2">
               <Label htmlFor="password">Password</Label>
               <div className="relative">
@@ -148,8 +195,9 @@ export default function Register() {
             <Button 
               type="submit" 
               className="w-full bg-[#14A800] hover:bg-[#0f8000] text-white"
+              disabled={loading}
             >
-              Create Account
+              {loading ? "Creating Account..." : "Create Account"}
             </Button>
           </form>
 
@@ -171,6 +219,7 @@ export default function Register() {
             variant="outline"
             className="w-full"
             onClick={handleGoogleSignup}
+            disabled={loading}
           >
             <svg className="mr-2 h-4 w-4" viewBox="0 0 24 24">
               <path

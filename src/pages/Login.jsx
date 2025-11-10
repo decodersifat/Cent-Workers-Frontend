@@ -1,9 +1,11 @@
 import React, { useState } from "react"
+import { useNavigate } from "react-router"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Mail, Lock, Eye, EyeOff } from "lucide-react"
+import useAuth from "@/hooks/useAuth"
 
 export default function Login() {
   const [showPassword, setShowPassword] = useState(false)
@@ -11,16 +13,43 @@ export default function Login() {
     email: "",
     password: ""
   })
+  const [error, setError] = useState("")
+  const [loading, setLoading] = useState(false)
+  
+  const { signInUser, signInWithGoogle } = useAuth()
+  const navigate = useNavigate()
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    console.log("Login data:", formData)
-   
+    setError("")
+    setLoading(true)
+    
+    try {
+      await signInUser(formData.email, formData.password)
+      console.log("Login successful!")
+      navigate("/")
+    } catch (err) {
+      console.error("Login error:", err)
+      setError(err.message || "Failed to sign in. Please check your credentials.")
+    } finally {
+      setLoading(false)
+    }
   }
 
-  const handleGoogleLogin = () => {
-    console.log("Google login clicked")
+  const handleGoogleLogin = async () => {
+    setError("")
+    setLoading(true)
     
+    try {
+      await signInWithGoogle()
+      console.log("Google login successful!")
+      navigate("/") 
+    } catch (err) {
+      console.error("Google login error:", err)
+      setError(err.message || "Failed to sign in with Google.")
+    } finally {
+      setLoading(false)
+    }
   }
 
   const handleChange = (e) => {
@@ -42,6 +71,12 @@ export default function Login() {
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
+          {error && (
+            <div className="bg-destructive/10 border border-destructive/20 text-destructive px-4 py-3 rounded-md text-sm">
+              {error}
+            </div>
+          )}
+          
           <form onSubmit={handleSubmit} className="space-y-4">
            
             <div className="space-y-2">
@@ -99,8 +134,9 @@ export default function Login() {
             <Button 
               type="submit" 
               className="w-full bg-[#14A800] hover:bg-[#0f8000] text-white"
+              disabled={loading}
             >
-              Sign In
+              {loading ? "Signing in..." : "Sign In"}
             </Button>
           </form>
 
@@ -122,6 +158,7 @@ export default function Login() {
             variant="outline"
             className="w-full"
             onClick={handleGoogleLogin}
+            disabled={loading}
           >
             <svg className="mr-2 h-4 w-4" viewBox="0 0 24 24">
               <path
