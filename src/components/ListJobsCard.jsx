@@ -1,16 +1,21 @@
 import React from 'react'
 import {  Clock, User } from 'lucide-react'
+import { Link } from 'react-router'
 function ListJobsCard( {job:job} ) {
     return (
         <div>
+
+             <Link to={`/job-details/${job._id}`}>
+            
+
             <div
-                key={job.id}
+                key={job._id}
                 className='bg-white rounded-lg p-4 shadow-sm hover:shadow-md border border-border transition-all duration-200 flex gap-4 cursor-pointer hover:bg-accent/5'
             >
 
                 <div className='hidden sm:block w-32 h-24 shrink-0 rounded-lg overflow-hidden bg-muted'>
                     <img
-                        src={job.image}
+                        src={job.coverImage || 'https://via.placeholder.com/300x200?text=' + encodeURIComponent(job.title)}
                         alt={job.title}
                         className='w-full h-full object-cover'
                     />
@@ -26,11 +31,11 @@ function ListJobsCard( {job:job} ) {
                             <div className='flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 text-sm text-muted-foreground'>
                                 <span className='flex items-center gap-1'>
                                     <User className='w-4 h-4' />
-                                    {job.company}
+                                    {job.postedBy}
                                 </span>
                                 <span className='flex items-center gap-1'>
                                     <Clock className='w-4 h-4' />
-                                    {job.postedDate}
+                                    {job.createdAt ? new Date(job.createdAt).toLocaleDateString() : 'Recently'}
                                 </span>
                             </div>
                         </div>
@@ -41,12 +46,13 @@ function ListJobsCard( {job:job} ) {
                                 {job.category}
                             </span>
                             <button className='bg-[#14A800] hover:bg-[#0f8000] text-white px-6 py-2 rounded-md font-medium text-sm transition-all duration-200 hover:shadow-md'>
-                                Apply
+                                View Details
                             </button>
                         </div>
                     </div>
                 </div>
             </div>
+            </Link>
         </div>
     )
 }

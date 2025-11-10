@@ -9,6 +9,7 @@ import JobDetails from './pages/JobDetails'
 import AuthProvider from './contexts/AuthProvider.jsx'
 import { createBrowserRouter } from "react-router";
 import { RouterProvider } from "react-router/dom";
+import AllJobs from './pages/AllJobs'
 
 
 const router = createBrowserRouter([
@@ -29,8 +30,12 @@ const router = createBrowserRouter([
     element: <AddJob />,
   },
   {
-    path: "/job-details",
-    element: <JobDetails />,
+    path: "/job-details/:jobId",
+    element: <JobDetails/>,
+  },
+  {
+    path: "/all-jobs",
+    element: <AllJobs/>,
   },
 ]);
 

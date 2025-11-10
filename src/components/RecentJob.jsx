@@ -1,45 +1,55 @@
-import React, { useState } from 'react'
+
+
+'use client'
+
+
+import React, { useEffect, useState } from 'react'
 import { List, LayoutGrid, Briefcase, Clock, User } from 'lucide-react'
 import GridJobsCard from './GridJobsCard'
 import ListJobsCard from './ListJobsCard'
-export default function RecentJob() {
-    const [viewMode, setViewMode] = useState('grid') // 'grid' or 'list'
 
-    // Sample job data - replace with API call
-    const jobs = [
-        {
-            id: 1,
-            title: 'Senior React Developer',
-            company: 'Tech Corp',
-            category: 'Web Development',
-            postedDate: '2 days ago',
-            image: 'https://via.placeholder.com/300x200?text=React+Developer'
-        },
-        {
-            id: 2,
-            title: 'UI/UX Designer',
-            company: 'Design Studio',
-            category: 'Design',
-            postedDate: '1 week ago',
-            image: 'https://via.placeholder.com/300x200?text=UI+Designer'
-        },
-        {
-            id: 3,
-            title: 'Full Stack Developer',
-            company: 'StartUp Inc',
-            category: 'Web Development',
-            postedDate: '3 days ago',
-            image: 'https://via.placeholder.com/300x200?text=Full+Stack'
-        },
-        {
-            id: 4,
-            title: 'Mobile App Developer',
-            company: 'App Studios',
-            category: 'Mobile',
-            postedDate: '5 days ago',
-            image: 'https://via.placeholder.com/300x200?text=Mobile+Dev'
-        },
-    ]
+
+export default function RecentJob() {
+    const [viewMode, setViewMode] = useState('grid')
+    const API = `${import.meta.env.VITE_BASE_URL}/api/v1/jobs/recent-jobs`
+    const [jobs, setJobs] = useState([]);
+    
+
+    useEffect(() => {
+        const fetchJobs = async () => {
+            try {
+                const response = await fetch(API);
+                
+                if (!response.ok) {
+                    throw new Error(`API error: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                console.log("Jobs fetched:", data);
+                
+                // Handle different response formats
+                let jobsArray = [];
+                if (Array.isArray(data)) {
+                    jobsArray = data;
+                } else if (data.jobs) {
+                    jobsArray = data.jobs;
+                } else if (data.data) {
+                    jobsArray = data.data;
+                } else if (data.Job) {
+                    // Handle single job response, wrap in array
+                    jobsArray = [data.Job];
+                }
+                setJobs(jobsArray);
+            } catch (error) {
+                console.error("Error fetching jobs:", error);
+                setJobs([]); 
+            }
+        };
+        
+        fetchJobs();
+    }, [API])
+
+
 
     return (
         <div className='w-full py-16 bg-accent/10'>
@@ -60,22 +70,20 @@ export default function RecentJob() {
                     <div className='flex gap-2 bg-white border border-border rounded-lg p-1 shadow-sm'>
                         <button
                             onClick={() => setViewMode('grid')}
-                            className={`p-2 rounded transition-all duration-200 ${
-                                viewMode === 'grid'
-                                    ? 'bg-[#14A800] text-white'
-                                    : 'text-muted-foreground hover:text-foreground'
-                            }`}
+                            className={`p-2 rounded transition-all duration-200 ${viewMode === 'grid'
+                                ? 'bg-[#14A800] text-white'
+                                : 'text-muted-foreground hover:text-foreground'
+                                }`}
                             title='Grid view'
                         >
                             <LayoutGrid className='w-5 h-5' />
                         </button>
                         <button
                             onClick={() => setViewMode('list')}
-                            className={`p-2 rounded transition-all duration-200 ${
-                                viewMode === 'list'
-                                    ? 'bg-[#14A800] text-white'
-                                    : 'text-muted-foreground hover:text-foreground'
-                            }`}
+                            className={`p-2 rounded transition-all duration-200 ${viewMode === 'list'
+                                ? 'bg-[#14A800] text-white'
+                                : 'text-muted-foreground hover:text-foreground'
+                                }`}
                             title='List view'
                         >
                             <List className='w-5 h-5' />
@@ -87,14 +95,14 @@ export default function RecentJob() {
 
                     <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6'>
                         {jobs.map((job) => (
-                            <GridJobsCard job={job}/>
+                            <GridJobsCard key={job.id || job._id} job={job} />
                         ))}
                     </div>
                 ) : (
 
                     <div className='space-y-3'>
                         {jobs.map((job) => (
-                            <ListJobsCard job={job} />
+                            <ListJobsCard key={job.id || job._id} job={job} />
                         ))}
                     </div>
                 )}

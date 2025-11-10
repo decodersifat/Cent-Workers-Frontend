@@ -49,7 +49,7 @@ export default function AddJob() {
         ...formData,
         userEmail: user.email,
         uid: user.uid,
-        createdAt: new Date().toISOString()
+        createdAt: new Date()
       }
 
       console.log("Job Data to be saved:", jobData)
@@ -59,7 +59,7 @@ export default function AddJob() {
       const response = await fetch(
         API,
         {
-        method: "POST",  // Fixed: lowercase 'method' instead of 'Method'
+        method: "POST",  
         headers: {
           "Content-Type": "application/json",
         },
