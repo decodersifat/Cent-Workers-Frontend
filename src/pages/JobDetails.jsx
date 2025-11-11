@@ -31,7 +31,7 @@ function JobDetails() {
         };
         
         if (jobId) fetchJob();
-    }, [jobId, API])
+    }, [])
 
     return (
         <>
