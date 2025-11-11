@@ -11,43 +11,41 @@ import ListJobsCard from './ListJobsCard'
 
 export default function RecentJob() {
     const [viewMode, setViewMode] = useState('grid')
-    const API = `${import.meta.env.VITE_BASE_URL}/api/v1/jobs/recent-jobs`
-    const [jobs, setJobs] = useState([]);
-    
+    const [jobs, setJobs] = useState([])
+    const [loading, setLoading] = useState(true)
+    const [error, setError] = useState(null)
+    const API_BASE = import.meta.env.VITE_BASE_URL
 
     useEffect(() => {
         const fetchJobs = async () => {
             try {
-                const response = await fetch(API);
-                
+                setLoading(true)
+                setError(null)
+
+                const response = await fetch(`${API_BASE}/api/v1/jobs/recent-jobs`)
+
                 if (!response.ok) {
-                    throw new Error(`API error: ${response.status}`);
+                    throw new Error('Failed to load jobs')
                 }
+
+                const data = await response.json()
                 
-                const data = await response.json();
-                console.log("Jobs fetched:", data);
-                
-                // Handle different response formats
-                let jobsArray = [];
-                if (Array.isArray(data)) {
-                    jobsArray = data;
-                } else if (data.jobs) {
-                    jobsArray = data.jobs;
-                } else if (data.data) {
-                    jobsArray = data.data;
-                } else if (data.Job) {
-                    // Handle single job response, wrap in array
-                    jobsArray = [data.Job];
-                }
-                setJobs(jobsArray);
-            } catch (error) {
-                console.error("Error fetching jobs:", error);
-                setJobs([]); 
+                const jobsArray = Array.isArray(data) 
+                    ? data 
+                    : data.jobs || data.data || (data.Job ? [data.Job] : [])
+
+                setJobs(jobsArray)
+            } catch (err) {
+                console.error("Error fetching jobs:", err)
+                setError('Could not load jobs. Please try again later.')
+                setJobs([])
+            } finally {
+                setLoading(false)
             }
-        };
-        
-        fetchJobs();
-    }, [API])
+        }
+
+        fetchJobs()
+    }, [])
 
 
 
@@ -67,44 +65,69 @@ export default function RecentJob() {
                         View all →
                     </a>
 
-                    <div className='flex gap-2 bg-white border border-border rounded-lg p-1 shadow-sm'>
-                        <button
-                            onClick={() => setViewMode('grid')}
-                            className={`p-2 rounded transition-all duration-200 ${viewMode === 'grid'
-                                ? 'bg-[#14A800] text-white'
-                                : 'text-muted-foreground hover:text-foreground'
-                                }`}
-                            title='Grid view'
-                        >
-                            <LayoutGrid className='w-5 h-5' />
-                        </button>
-                        <button
-                            onClick={() => setViewMode('list')}
-                            className={`p-2 rounded transition-all duration-200 ${viewMode === 'list'
-                                ? 'bg-[#14A800] text-white'
-                                : 'text-muted-foreground hover:text-foreground'
-                                }`}
-                            title='List view'
-                        >
-                            <List className='w-5 h-5' />
-                        </button>
-                    </div>
+                    {!loading && !error && (
+                        <div className='flex gap-2 bg-white border border-border rounded-lg p-1 shadow-sm'>
+                            <button
+                                onClick={() => setViewMode('grid')}
+                                className={`p-2 rounded transition-all duration-200 ${viewMode === 'grid'
+                                    ? 'bg-[#14A800] text-white'
+                                    : 'text-muted-foreground hover:text-foreground'
+                                    }`}
+                                title='Grid view'
+                            >
+                                <LayoutGrid className='w-5 h-5' />
+                            </button>
+                            <button
+                                onClick={() => setViewMode('list')}
+                                className={`p-2 rounded transition-all duration-200 ${viewMode === 'list'
+                                    ? 'bg-[#14A800] text-white'
+                                    : 'text-muted-foreground hover:text-foreground'
+                                    }`}
+                                title='List view'
+                            >
+                                <List className='w-5 h-5' />
+                            </button>
+                        </div>
+                    )}
                 </div>
 
-                {viewMode === 'grid' ? (
-
-                    <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6'>
-                        {jobs.map((job) => (
-                            <GridJobsCard key={job.id || job._id} job={job} />
-                        ))}
+                {loading && (
+                    <div className='text-center py-12'>
+                        <div className='animate-spin rounded-full h-12 w-12 border-b-2 border-[#14A800] mx-auto'></div>
+                        <p className='text-muted-foreground mt-4'>Loading jobs...</p>
                     </div>
-                ) : (
+                )}
 
-                    <div className='space-y-3'>
-                        {jobs.map((job) => (
-                            <ListJobsCard key={job.id || job._id} job={job} />
-                        ))}
+                {error && (
+                    <div className='bg-red-50 border border-red-200 text-red-800 p-4 rounded-lg text-center'>
+                        <p>{error}</p>
                     </div>
+                )}
+
+                {!loading && !error && jobs.length === 0 && (
+                    <div className='text-center py-12'>
+                        <p className='text-muted-foreground'>No jobs available.</p>
+                    </div>
+                )}
+
+                {!loading && !error && jobs.length > 0 && (
+                    <>
+                        {viewMode === 'grid' ? (
+
+                            <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6'>
+                                {jobs.map((job) => (
+                                    <GridJobsCard key={job._id} job={job} />
+                                ))}
+                            </div>
+                        ) : (
+
+                            <div className='space-y-3'>
+                                {jobs.map((job) => (
+                                    <ListJobsCard key={job._id} job={job} />
+                                ))}
+                            </div>
+                        )}
+                    </>
                 )}
             </div>
         </div>
