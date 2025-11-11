@@ -1,6 +1,7 @@
 import React from 'react'
 import Navbar from './components/Navbar'
 import RecentJob from './components/RecentJob';
+import TopCategories from './components/TopCategories';
 import Footer from './components/Footer';
 
 function App() {
@@ -17,6 +18,7 @@ function App() {
             Connect with talented professionals and grow your business today.
           </p>
         </div>
+        <TopCategories />
         <RecentJob/>
       </main>
       <Footer />
