@@ -127,7 +127,7 @@ function MyAcceptedTasks() {
                     {!loading && !error && acceptedJobs.length > 0 && (
                         <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>
                             {acceptedJobs.map((job) => (
-                                <div key={job._id} className='bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-lg border border-border transition-all duration-200'>
+                                <div key={job._id} className='bg-base-100 rounded-lg overflow-hidden shadow-sm hover:shadow-lg border border-border transition-all duration-200'>
                                     <div className='h-40 overflow-hidden bg-muted'>
                                         <img
                                             src={job.coverImage || 'https://via.placeholder.com/300x200?text=' + encodeURIComponent(job.jobTitle)}

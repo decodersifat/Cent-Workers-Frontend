@@ -38,7 +38,7 @@ function TopCategories() {
     }
 
     return (
-        <section className='w-full py-16 bg-white'>
+        <section className='w-full py-16 bg-base-100'>
             <div className='container mx-auto px-4'>
 
                 <div className='text-center mb-12'>

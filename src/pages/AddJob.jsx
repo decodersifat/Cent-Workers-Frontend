@@ -331,7 +331,7 @@ export default function AddJob() {
                     <button
                       type="button"
                       onClick={() => setCategoryDropdownOpen(!categoryDropdownOpen)}
-                      className="w-full pl-10 pr-10 py-2 border border-input rounded-md bg-white text-left flex items-center justify-between hover:bg-accent/50 transition-colors"
+                      className="w-full pl-10 pr-10 py-2 border border-input rounded-md bg-base-100 text-left flex items-center justify-between hover:bg-accent/50 transition-colors"
                     >
                       <span className="text-sm">
                         {formData.category
@@ -346,7 +346,7 @@ export default function AddJob() {
                   </div>
 
                   {categoryDropdownOpen && (
-                    <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-input rounded-md shadow-lg z-50 max-h-96 overflow-y-auto">
+                    <div className="absolute top-full left-0 right-0 mt-1 bg-base-100 border border-input rounded-md shadow-lg z-50 max-h-96 overflow-y-auto">
                       {/* All Categories Section */}
                       {categories.length > 0 && (
                         <>
