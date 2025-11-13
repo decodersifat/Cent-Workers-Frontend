@@ -1,7 +1,15 @@
 import React from 'react'
-import { Link } from 'react-router'
-import {  Clock } from 'lucide-react'
+import { Link, useNavigate } from 'react-router'
+import {  Clock, User } from 'lucide-react'
 function GridJobsCard({ job: job }) {
+    const navigate = useNavigate()
+    
+    const handlePosterClick = (e) => {
+        e.preventDefault()
+        e.stopPropagation()
+        navigate(`/user/${job.userEmail}`)
+    }
+    
     return (
         <div>
 
@@ -25,7 +33,13 @@ function GridJobsCard({ job: job }) {
                         <h3 className='font-display font-bold text-lg text-foreground line-clamp-2'>
                             {job.title}
                         </h3>
-                        <p className='text-sm text-muted-foreground'>{job.postedBy}</p>
+                        <button 
+                            onClick={handlePosterClick}
+                            className='text-sm text-muted-foreground hover:text-[#14A800] transition-colors inline-flex items-center gap-1'
+                        >
+                            <User size={14} />
+                            {job.postedBy}
+                        </button>
                     </div>
 
 

@@ -11,6 +11,7 @@ import MyAcceptedTasks from './pages/MyAcceptedTasks'
 import UpdateJob from './pages/UpdateJob'
 import NotFound from './pages/NotFound'
 import Profile from './pages/Profile'
+import PublicProfile from './pages/PublicProfile'
 import AuthProvider from './contexts/AuthProvider.jsx'
 import ThemeProvider from './contexts/ThemeProvider.jsx'
 import PrivateRoute from './components/PrivateRoute.jsx'
@@ -84,6 +85,10 @@ const router = createBrowserRouter([
         <Profile />
       </PrivateRoute>
     ),
+  },
+  {
+    path: "/user/:email",
+    element: <PublicProfile />,
   },
   {
     path: "*",

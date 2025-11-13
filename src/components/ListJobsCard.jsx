@@ -1,7 +1,15 @@
 import React from 'react'
 import {  Clock, User } from 'lucide-react'
-import { Link } from 'react-router'
+import { Link, useNavigate } from 'react-router'
 function ListJobsCard( {job:job} ) {
+    const navigate = useNavigate()
+    
+    const handlePosterClick = (e) => {
+        e.preventDefault()
+        e.stopPropagation()
+        navigate(`/user/${job.userEmail}`)
+    }
+    
     return (
         <div>
 
@@ -29,10 +37,13 @@ function ListJobsCard( {job:job} ) {
                                 {job.title}
                             </h3>
                             <div className='flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 text-sm text-muted-foreground'>
-                                <span className='flex items-center gap-1'>
+                                <button 
+                                    onClick={handlePosterClick}
+                                    className='flex items-center gap-1 hover:text-[#14A800] transition-colors'
+                                >
                                     <User className='w-4 h-4' />
                                     {job.postedBy}
-                                </span>
+                                </button>
                                 <span className='flex items-center gap-1'>
                                     <Clock className='w-4 h-4' />
                                     {job.createdAt ? new Date(job.createdAt).toLocaleDateString() : 'Recently'}

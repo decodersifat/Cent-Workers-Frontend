@@ -154,7 +154,7 @@ function JobDetails() {
                             <div className='text-lg font-medium text-foreground mb-6'>
                                 Posted by: 
                                 <button 
-                                    onClick={() => navigate(`/profile/${job.userEmail}`)}
+                                    onClick={() => navigate(`/user/${job.userEmail}`)}
                                     className='text-[#14A800] font-semibold ml-2 hover:underline hover:text-[#0f8000] transition-colors inline-flex items-center gap-1'
                                 >
                                     <User size={18} />
