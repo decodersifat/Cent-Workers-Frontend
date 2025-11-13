@@ -13,6 +13,8 @@ const PublicProfile = () => {
     const [profile, setProfile] = useState(null);
     const [postedJobs, setPostedJobs] = useState([]);
     const [loading, setLoading] = useState(true);
+    
+    const API_BASE = import.meta.env.VITE_BASE_URL;
 
     useEffect(() => {
         fetchUserProfile();
@@ -21,7 +23,7 @@ const PublicProfile = () => {
 
     const fetchUserProfile = async () => {
         try {
-            const response = await fetch(`https://cent-workers-backend.vercel.app/api/v1/users/profile/${email}`);
+            const response = await fetch(`${API_BASE}/api/v1/users/profile/${email}`);
             const result = await response.json();
             
             if (result.success) {
@@ -35,7 +37,7 @@ const PublicProfile = () => {
 
     const fetchUserJobs = async () => {
         try {
-            const response = await fetch(`https://cent-workers-backend.vercel.app/api/v1/jobs/myAddedJobs/${email}`);
+            const response = await fetch(`${API_BASE}/api/v1/jobs/myAddedJobs/${email}`);
             const result = await response.json();
             
             if (result.success) {
