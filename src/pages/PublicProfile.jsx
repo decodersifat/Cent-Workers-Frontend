@@ -17,8 +17,11 @@ const PublicProfile = () => {
     const API_BASE = import.meta.env.VITE_BASE_URL;
 
     useEffect(() => {
-        fetchUserProfile();
-        fetchUserJobs();
+        const loadData = async () => {
+            const profileData = await fetchUserProfile();
+            await fetchUserJobs(profileData);
+        };
+        loadData();
     }, [email]);
 
     const fetchUserProfile = async () => {
@@ -28,20 +31,34 @@ const PublicProfile = () => {
             
             if (result.success) {
                 setProfile(result.data);
+                return result.data;
             }
+            return null;
         } catch (error) {
             console.error("Error fetching profile:", error);
             toast.error("Failed to load profile");
+            return null;
         }
     };
 
-    const fetchUserJobs = async () => {
+    const fetchUserJobs = async (profileData) => {
         try {
             const response = await fetch(`${API_BASE}/api/v1/jobs/myAddedJobs/${email}`);
             const result = await response.json();
             
             if (result.success) {
-                setPostedJobs(result.data || []);
+                const jobs = result.data || [];
+                setPostedJobs(jobs);
+                
+                // If profile doesn't have name/photo, try to get from first job
+                if (jobs.length > 0 && profileData && (!profileData.displayName || !profileData.photoURL)) {
+                    const firstJob = jobs[0];
+                    setProfile(prev => ({
+                        ...prev,
+                        displayName: prev?.displayName || firstJob.postedBy || 'Anonymous User',
+                        photoURL: prev?.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(firstJob.postedBy || email)}&background=14A800&color=fff`
+                    }));
+                }
             } else {
                 setPostedJobs([]);
             }
