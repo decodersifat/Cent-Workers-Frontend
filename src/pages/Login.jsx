@@ -1,11 +1,12 @@
 import React, { useState } from "react"
-import { useNavigate } from "react-router"
+import { useNavigate, useLocation } from "react-router"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Mail, Lock, Eye, EyeOff } from "lucide-react"
 import useAuth from "@/hooks/useAuth"
+import toast from 'react-hot-toast'
 
 export default function Login() {
   const [showPassword, setShowPassword] = useState(false)
@@ -18,6 +19,9 @@ export default function Login() {
   
   const { signInUser, signInWithGoogle } = useAuth()
   const navigate = useNavigate()
+  const location = useLocation()
+  
+  const from = location.state?.from?.pathname || "/"
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -27,10 +31,12 @@ export default function Login() {
     try {
       await signInUser(formData.email, formData.password)
       console.log("Login successful!")
-      navigate("/")
+      toast.success('Login successful!')
+      navigate(from, { replace: true })
     } catch (err) {
       console.error("Login error:", err)
       setError(err.message || "Failed to sign in. Please check your credentials.")
+      toast.error(err.message || "Failed to sign in. Please check your credentials.")
     } finally {
       setLoading(false)
     }
@@ -43,10 +49,12 @@ export default function Login() {
     try {
       await signInWithGoogle()
       console.log("Google login successful!")
-      navigate("/") 
+      toast.success('Google login successful!')
+      navigate(from, { replace: true })
     } catch (err) {
       console.error("Google login error:", err)
       setError(err.message || "Failed to sign in with Google.")
+      toast.error(err.message || "Failed to sign in with Google.")
     } finally {
       setLoading(false)
     }

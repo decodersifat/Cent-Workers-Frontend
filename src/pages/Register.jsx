@@ -7,6 +7,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { User, Mail, Lock, Eye, EyeOff } from "lucide-react"
 import useAuth from "@/hooks/useAuth"
 import { updateProfile } from "firebase/auth"
+import toast from 'react-hot-toast'
 
 export default function Register() {
   const [showPassword, setShowPassword] = useState(false)
@@ -29,11 +30,28 @@ export default function Register() {
     
     if (formData.password !== formData.confirmPassword) {
       setError("Passwords do not match!")
+      toast.error("Passwords do not match!")
       return
     }
     
     if (formData.password.length < 6) {
       setError("Password must be at least 6 characters long!")
+      toast.error("Password must be at least 6 characters long!")
+      return
+    }
+
+    const hasUpperCase = /[A-Z]/.test(formData.password)
+    const hasLowerCase = /[a-z]/.test(formData.password)
+
+    if (!hasUpperCase) {
+      setError("Password must include at least one uppercase letter!")
+      toast.error("Password must include at least one uppercase letter!")
+      return
+    }
+
+    if (!hasLowerCase) {
+      setError("Password must include at least one lowercase letter!")
+      toast.error("Password must include at least one lowercase letter!")
       return
     }
     
@@ -41,15 +59,16 @@ export default function Register() {
     
     try {
       const userCredential = await createUser(formData.email, formData.password)
-      // Update user profile with name
       await updateProfile(userCredential.user, {
         displayName: formData.name
       })
       console.log("Registration successful!")
-      navigate("/") // Redirect to home page after successful registration
+      toast.success('Registration successful!')
+      navigate("/")
     } catch (err) {
       console.error("Registration error:", err)
       setError(err.message || "Failed to create account. Please try again.")
+      toast.error(err.message || "Failed to create account. Please try again.")
     } finally {
       setLoading(false)
     }
@@ -62,10 +81,12 @@ export default function Register() {
     try {
       await signInWithGoogle()
       console.log("Google signup successful!")
-      navigate("/") // Redirect to home page after successful signup
+      toast.success('Google signup successful!')
+      navigate("/")
     } catch (err) {
       console.error("Google signup error:", err)
       setError(err.message || "Failed to sign up with Google.")
+      toast.error(err.message || "Failed to sign up with Google.")
     } finally {
       setLoading(false)
     }

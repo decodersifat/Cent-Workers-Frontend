@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { List, LayoutGrid, Search, Filter, ChevronLeft, ChevronRight } from 'lucide-react'
+import { List, LayoutGrid, Search, Filter, ChevronLeft, ChevronRight, ArrowUpDown } from 'lucide-react'
 import Navbar from '@/components/Navbar'
 import GridJobsCard from '@/components/GridJobsCard'
 import ListJobsCard from '@/components/ListJobsCard'
@@ -13,6 +13,7 @@ function AllJobs() {
     const [selectedCategory, setSelectedCategory] = useState('all')
     const [currentPage, setCurrentPage] = useState(1)
     const [categories, setCategories] = useState([])
+    const [sortOrder, setSortOrder] = useState('desc')
 
     const API = `${import.meta.env.VITE_BASE_URL}/api/v1/jobs/all-jobs`
     const itemsPerPage = viewMode === 'grid' ? 12 : 10
@@ -47,7 +48,6 @@ function AllJobs() {
         fetchJobs()
     }, [])
 
-    // Filter jobs based on search and category
     const filteredJobs = jobs.filter(job => {
         const matchesSearch = job.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
                              job.postedBy.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -56,15 +56,19 @@ function AllJobs() {
         return matchesSearch && matchesCategory
     })
 
-    // Pagination
-    const totalPages = Math.ceil(filteredJobs.length / itemsPerPage)
-    const startIdx = (currentPage - 1) * itemsPerPage
-    const paginatedJobs = filteredJobs.slice(startIdx, startIdx + itemsPerPage)
+    const sortedJobs = [...filteredJobs].sort((a, b) => {
+        const dateA = new Date(a.createdAt)
+        const dateB = new Date(b.createdAt)
+        return sortOrder === 'desc' ? dateB - dateA : dateA - dateB
+    })
 
-    // Reset to page 1 when filters change
+    const totalPages = Math.ceil(sortedJobs.length / itemsPerPage)
+    const startIdx = (currentPage - 1) * itemsPerPage
+    const paginatedJobs = sortedJobs.slice(startIdx, startIdx + itemsPerPage)
+
     useEffect(() => {
         setCurrentPage(1)
-    }, [searchTerm, selectedCategory])
+    }, [searchTerm, selectedCategory, sortOrder])
 
     return (
         <>
@@ -120,30 +124,41 @@ function AllJobs() {
                     {/* View Mode and Results */}
                     <div className='flex flex-col sm:flex-row justify-between items-center mb-8 gap-4'>
                         <div className='text-sm text-muted-foreground'>
-                            Showing {paginatedJobs.length > 0 ? startIdx + 1 : 0} - {Math.min(startIdx + itemsPerPage, filteredJobs.length)} of {filteredJobs.length} jobs
+                            Showing {paginatedJobs.length > 0 ? startIdx + 1 : 0} - {Math.min(startIdx + itemsPerPage, sortedJobs.length)} of {sortedJobs.length} jobs
                         </div>
 
-                        <div className='flex gap-2 bg-white border border-border rounded-lg p-1 shadow-sm'>
+                        <div className='flex gap-2'>
                             <button
-                                onClick={() => setViewMode('grid')}
-                                className={`p-2 rounded transition-all duration-200 ${viewMode === 'grid'
-                                    ? 'bg-[#14A800] text-white'
-                                    : 'text-muted-foreground hover:text-foreground'
-                                    }`}
-                                title='Grid view'
+                                onClick={() => setSortOrder(sortOrder === 'desc' ? 'asc' : 'desc')}
+                                className='flex items-center gap-2 bg-white border border-border rounded-lg px-4 py-2 shadow-sm hover:bg-accent/50 transition-colors'
+                                title={`Sort by ${sortOrder === 'desc' ? 'Oldest First' : 'Newest First'}`}
                             >
-                                <LayoutGrid className='w-5 h-5' />
+                                <ArrowUpDown className='w-4 h-4' />
+                                <span className='text-sm font-medium'>{sortOrder === 'desc' ? 'Newest' : 'Oldest'}</span>
                             </button>
-                            <button
-                                onClick={() => setViewMode('list')}
-                                className={`p-2 rounded transition-all duration-200 ${viewMode === 'list'
-                                    ? 'bg-[#14A800] text-white'
-                                    : 'text-muted-foreground hover:text-foreground'
-                                    }`}
-                                title='List view'
-                            >
-                                <List className='w-5 h-5' />
-                            </button>
+                            
+                            <div className='flex gap-2 bg-white border border-border rounded-lg p-1 shadow-sm'>
+                                <button
+                                    onClick={() => setViewMode('grid')}
+                                    className={`p-2 rounded transition-all duration-200 ${viewMode === 'grid'
+                                        ? 'bg-[#14A800] text-white'
+                                        : 'text-muted-foreground hover:text-foreground'
+                                        }`}
+                                    title='Grid view'
+                                >
+                                    <LayoutGrid className='w-5 h-5' />
+                                </button>
+                                <button
+                                    onClick={() => setViewMode('list')}
+                                    className={`p-2 rounded transition-all duration-200 ${viewMode === 'list'
+                                        ? 'bg-[#14A800] text-white'
+                                        : 'text-muted-foreground hover:text-foreground'
+                                        }`}
+                                    title='List view'
+                                >
+                                    <List className='w-5 h-5' />
+                                </button>
+                            </div>
                         </div>
                     </div>
 

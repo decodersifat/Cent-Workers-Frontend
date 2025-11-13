@@ -1,7 +1,12 @@
 import React, { useState, useEffect } from "react"
-import { Menu, X, Briefcase } from "lucide-react"
+import { Menu, X, Briefcase, LogOut } from "lucide-react"
+import useAuth from "@/hooks/useAuth"
+import { useNavigate } from "react-router"
+import toast from 'react-hot-toast'
 
 export default function Navbar() {
+  const { user, signOutUser } = useAuth()
+  const navigate = useNavigate()
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isScrolled, setIsScrolled] = useState(false)
 
@@ -17,10 +22,22 @@ export default function Navbar() {
     setIsMenuOpen(!isMenuOpen)
   }
 
+  const handleLogout = async () => {
+    try {
+      await signOutUser()
+      toast.success('Logged out successfully!')
+      navigate('/')
+    } catch (error) {
+      console.error('Logout error:', error)
+      toast.error('Failed to logout')
+    }
+  }
+
   const navLinks = [
     { name: "Home", href: "/" },
     { name: "All Jobs", href: "/all-jobs" },
     { name: "Add a Job", href: "/add-job" },
+    { name: "My Added Jobs", href: "/my-added-jobs" },
     { name: "My Accepted Tasks", href: "/my-accepted-tasks" },
   ]
 
@@ -54,12 +71,35 @@ export default function Navbar() {
                 <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-[#14A800] transition-all duration-200 group-hover:w-full"></span>
               </a>
             ))}
-            <a
-              href="/login"
-              className="ml-2 lg:ml-4 bg-[#14A800] text-white px-5 lg:px-6 py-2 lg:py-2.5 rounded-lg hover:bg-[#0f8000] transition-all duration-200 font-medium text-sm lg:text-base shadow-sm hover:shadow-md transform hover:scale-105"
-            >
-              Login/Register
-            </a>
+            
+            {user ? (
+              <div className="flex items-center gap-3 ml-2 lg:ml-4">
+                <div className="group relative">
+                  <img 
+                    src={user.photoURL || 'https://via.placeholder.com/40'} 
+                    alt={user.displayName || 'User'}
+                    className="w-10 h-10 rounded-full border-2 border-[#14A800] cursor-pointer hover:scale-105 transition-transform"
+                  />
+                  <div className="absolute bottom-full right-0 mb-2 hidden group-hover:block bg-gray-900 text-white text-sm px-3 py-2 rounded-lg whitespace-nowrap z-50">
+                    {user.displayName || user.email}
+                  </div>
+                </div>
+                <button
+                  onClick={handleLogout}
+                  className="flex items-center gap-2 bg-red-500 text-white px-5 lg:px-6 py-2 lg:py-2.5 rounded-lg hover:bg-red-600 transition-all duration-200 font-medium text-sm lg:text-base shadow-sm hover:shadow-md transform hover:scale-105"
+                >
+                  <LogOut className="w-4 h-4" />
+                  Logout
+                </button>
+              </div>
+            ) : (
+              <a
+                href="/login"
+                className="ml-2 lg:ml-4 bg-[#14A800] text-white px-5 lg:px-6 py-2 lg:py-2.5 rounded-lg hover:bg-[#0f8000] transition-all duration-200 font-medium text-sm lg:text-base shadow-sm hover:shadow-md transform hover:scale-105"
+              >
+                Login/Register
+              </a>
+            )}
           </div>
 
         
@@ -93,14 +133,40 @@ export default function Navbar() {
                 {link.name}
               </a>
             ))}
-            <div className="px-4 pt-2">
-              <a
-                href="/login"
-                className="block w-full bg-[#14A800] text-white px-6 py-2.5 rounded-lg hover:bg-[#0f8000] transition-all duration-200 font-medium text-center shadow-sm hover:shadow-md transform hover:scale-[1.02]"
-                onClick={toggleMenu}
-              >
-                Login/Register
-              </a>
+            <div className="px-4 pt-2 space-y-2">
+              {user ? (
+                <>
+                  <div className="flex items-center gap-3 p-3 bg-accent/50 rounded-lg">
+                    <img 
+                      src={user.photoURL || 'https://via.placeholder.com/40'} 
+                      alt={user.displayName || 'User'}
+                      className="w-10 h-10 rounded-full border-2 border-[#14A800]"
+                    />
+                    <div className="flex-1">
+                      <p className="font-medium text-foreground">{user.displayName || 'User'}</p>
+                      <p className="text-xs text-muted-foreground">{user.email}</p>
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => {
+                      handleLogout()
+                      toggleMenu()
+                    }}
+                    className="flex items-center justify-center gap-2 w-full bg-red-500 text-white px-6 py-2.5 rounded-lg hover:bg-red-600 transition-all duration-200 font-medium text-center shadow-sm hover:shadow-md"
+                  >
+                    <LogOut className="w-4 h-4" />
+                    Logout
+                  </button>
+                </>
+              ) : (
+                <a
+                  href="/login"
+                  className="block w-full bg-[#14A800] text-white px-6 py-2.5 rounded-lg hover:bg-[#0f8000] transition-all duration-200 font-medium text-center shadow-sm hover:shadow-md transform hover:scale-[1.02]"
+                  onClick={toggleMenu}
+                >
+                  Login/Register
+                </a>
+              )}
             </div>
           </div>
         </div>

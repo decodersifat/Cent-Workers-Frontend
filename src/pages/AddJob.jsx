@@ -7,6 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Briefcase, User, Tag, FileText, Image, Plus, X, ChevronDown } from "lucide-react"
 import useAuth from "@/hooks/useAuth"
 import Navbar from "@/components/Navbar"
+import toast from 'react-hot-toast'
 
 export default function AddJob() {
   const { user } = useAuth()
@@ -117,10 +118,12 @@ export default function AddJob() {
       setNewCategoryImage("")
       setShowAddCategory(false)
       setSuccess("Category added successfully!")
+      toast.success("Category added successfully!")
       setTimeout(() => setSuccess(""), 3000)
     } catch (err) {
       console.error("Error adding category:", err)
       setError(err.message || "Failed to add category")
+      toast.error(err.message || "Failed to add category")
     } finally {
       setAddingCategory(false)
     }
@@ -141,10 +144,12 @@ export default function AddJob() {
         setFormData({ ...formData, category: "" })
       }
       setSuccess("Category deleted successfully!")
+      toast.success("Category deleted successfully!")
       setTimeout(() => setSuccess(""), 3000)
     } catch (err) {
       console.error("Error deleting category:", err)
       setError(err.message || "Failed to delete category")
+      toast.error(err.message || "Failed to delete category")
     }
   }
 
@@ -183,8 +188,7 @@ export default function AddJob() {
         summary: formData.summary,
         coverImage: formData.coverImage,
         userEmail: user.email,
-        uid: user.uid,
-        createdAt: new Date()
+        uid: user.uid
       }
 
       console.log("Job Data to be saved:", jobData)
@@ -206,8 +210,8 @@ export default function AddJob() {
       }
       
       setSuccess("Job posted successfully!")
+      toast.success("Job posted successfully!")
       
-      // Reset form
       setFormData({
         title: "",
         postedBy: "",
@@ -216,7 +220,6 @@ export default function AddJob() {
         coverImage: ""
       })
 
-      // Redirect to all jobs page after 2 seconds
       setTimeout(() => {
         navigate("/all-jobs")
       }, 2000)
@@ -224,6 +227,7 @@ export default function AddJob() {
     } catch (err) {
       console.error("Error posting job:", err)
       setError(err.message || "Failed to post job. Please try again.")
+      toast.error(err.message || "Failed to post job. Please try again.")
     } finally {
       setLoading(false)
     }
