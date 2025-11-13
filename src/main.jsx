@@ -10,6 +10,7 @@ import MyAddedJobs from './pages/MyAddedJobs'
 import MyAcceptedTasks from './pages/MyAcceptedTasks'
 import UpdateJob from './pages/UpdateJob'
 import NotFound from './pages/NotFound'
+import Profile from './pages/Profile'
 import AuthProvider from './contexts/AuthProvider.jsx'
 import ThemeProvider from './contexts/ThemeProvider.jsx'
 import PrivateRoute from './components/PrivateRoute.jsx'
@@ -73,6 +74,14 @@ const router = createBrowserRouter([
     element: (
       <PrivateRoute>
         <UpdateJob />
+      </PrivateRoute>
+    ),
+  },
+  {
+    path: "/profile/:uid",
+    element: (
+      <PrivateRoute>
+        <Profile />
       </PrivateRoute>
     ),
   },

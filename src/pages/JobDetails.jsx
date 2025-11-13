@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import { Clock, CheckCircle } from 'lucide-react';
-import { useParams } from 'react-router';
+import { Clock, CheckCircle, User } from 'lucide-react';
+import { useParams, useNavigate } from 'react-router';
 import Navbar from '@/components/Navbar'
 import useAuth from '@/hooks/useAuth'
 import toast from 'react-hot-toast'
@@ -9,6 +9,7 @@ import dummy from '../assets/dummy.jpg'
 function JobDetails() {
     const { user } = useAuth()
     const { jobId } = useParams();
+    const navigate = useNavigate();
     const API = `${import.meta.env.VITE_BASE_URL}/api/v1/jobs/job-details/${jobId}`
     const API_BASE = import.meta.env.VITE_BASE_URL
     const [job, setJob] = useState(null);
@@ -151,7 +152,14 @@ function JobDetails() {
 
 
                             <div className='text-lg font-medium text-foreground mb-6'>
-                                Posted by: <span className='text-[#14A800] font-semibold'>{job.postedBy}</span>
+                                Posted by: 
+                                <button 
+                                    onClick={() => navigate(`/profile/${job.userEmail}`)}
+                                    className='text-[#14A800] font-semibold ml-2 hover:underline hover:text-[#0f8000] transition-colors inline-flex items-center gap-1'
+                                >
+                                    <User size={18} />
+                                    {job.postedBy}
+                                </button>
                             </div>
 
 
