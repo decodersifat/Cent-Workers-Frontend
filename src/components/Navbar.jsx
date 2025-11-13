@@ -40,16 +40,18 @@ export default function Navbar() {
     { name: "Home", href: "/" },
     { name: "All Jobs", href: "/all-jobs" },
     { name: "Add a Job", href: "/add-job" },
+    { name: "My Posted Jobs", href: "/my-added-jobs" },
+    { name: "My Accepted Tasks", href: "/my-accepted-tasks" },
   ]
 
   return (
-    <nav className={`sticky top-0 z-50 w-full border-b border-base-300 bg-base-100/95 backdrop-blur supports-[backdrop-filter]:bg-base-100/60 transition-all duration-300 ${
+    <nav className={`sticky top-0 z-50 w-full border-b border-base-300 bg-base-100/95 backdrop-blur supports-backdrop-filter:bg-base-100/60 transition-all duration-300 ${
       isScrolled ? 'shadow-md' : ''
     }`}>
       <div className="container mx-auto px-4">
         <div className="flex h-16 items-center justify-between">
           {/* Logo */}
-          <div className="flex items-center gap-8">
+          <div className="flex items-center">
             <a href="/" className="flex items-center gap-2 group">
               <div className="bg-linear-to-r from-[#14A800] to-[#0f8000] p-2 rounded-lg group-hover:scale-105 transition-transform duration-200">
                 <Briefcase className="h-5 w-5 text-white" />
@@ -58,20 +60,20 @@ export default function Navbar() {
                 Cent Workers
               </span>
             </a>
-
-            {/* Desktop Navigation */}
-            <nav className="hidden lg:flex items-center gap-1">
-              {navLinks.map((link) => (
-                <a
-                  key={link.name}
-                  href={link.href}
-                  className="px-4 py-2 text-sm font-medium text-base-content/80 hover:text-[#14A800] hover:bg-[#14A800]/5 rounded-md transition-colors duration-200"
-                >
-                  {link.name}
-                </a>
-              ))}
-            </nav>
           </div>
+
+          {/* Desktop Navigation - Centered */}
+          <nav className="hidden lg:flex items-center gap-1 absolute left-1/2 transform -translate-x-1/2">
+            {navLinks.map((link) => (
+              <a
+                key={link.name}
+                href={link.href}
+                className="px-4 py-2 text-sm font-medium text-base-content/80 hover:text-[#14A800] hover:bg-[#14A800]/5 rounded-md transition-colors duration-200"
+              >
+                {link.name}
+              </a>
+            ))}
+          </nav>
 
           {/* Right Section */}
           <div className="flex items-center gap-3">

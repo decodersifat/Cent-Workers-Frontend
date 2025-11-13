@@ -8,7 +8,7 @@ import { ArrowRight, Sparkles, Zap, TrendingUp } from 'lucide-react';
 import gsap from 'gsap';
 
 function App() {
-  const shapeRef = useRef(null)
+
   const heroRef = useRef(null)
 
   useEffect(() => {
@@ -65,7 +65,7 @@ function App() {
         <div ref={heroRef} className="relative overflow-hidden bg-linear-to-br from-base-100 via-base-200 to-base-100 py-16 lg:py-24">
           <div className="absolute inset-0 overflow-hidden">
             <div className="floating-shape absolute top-20 left-10 w-72 h-72 bg-[#14A800]/10 rounded-full blur-3xl"></div>
-            <div className="floating-shape absolute bottom-20 right-10 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl" style={{animationDelay: '1s'}}></div>
+            <div className="floating-shape absolute bottom-20 right-10 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl" style={{ animationDelay: '1s' }}></div>
             <div className="pulse-circle absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] border-4 border-[#14A800]/20 rounded-full"></div>
           </div>
 
@@ -89,25 +89,30 @@ function App() {
                 Connect with talented professionals and businesses worldwide. Your dream project is just one click away.
               </p>
 
-              <div className="hero-buttons flex flex-col sm:flex-row gap-4 justify-center items-center px-4">
-                <a 
+              <div className="hero-buttons flex flex-col sm:flex-row gap-4 justify-center items-center mt-6">
+
+                <a
                   href="/add-job"
-                  className="group btn btn-lg bg-linear-to-r from-[#14A800] to-[#0f8000] text-white border-none hover:shadow-2xl hover:scale-105 transition-all duration-300 w-full sm:w-auto"
+                  className="relative flex items-center justify-center gap-2 px-6 py-3 text-lg font-semibold text-white bg-gradient-to-r from-[#14A800] to-[#0f8000] rounded-xl shadow-lg hover:shadow-green-500/30 hover:-translate-y-1 transition-all duration-300"
                 >
                   Post a Job
-                  <Zap className="w-5 h-5 group-hover:rotate-12 transition-transform" />
+                  <Zap className="w-5 h-5 transition-transform duration-300 group-hover:rotate-12" />
+                  <span className="absolute inset-0 rounded-xl bg-gradient-to-r from-[#14A800]/20 to-[#0f8000]/20 opacity-0 hover:opacity-100 blur-lg transition-all duration-300"></span>
                 </a>
-                <a 
+
+
+                <a
                   href="/all-jobs"
-                  className="group btn btn-lg btn-outline border-2 border-[#14A800] text-[#14A800] hover:bg-[#14A800] hover:text-white hover:scale-105 transition-all duration-300"
+                  className="relative flex items-center justify-center gap-2 px-6 py-3 text-lg font-semibold border-2 border-[#14A800] text-[#14A800] rounded-xl hover:bg-[#14A800] hover:text-white hover:shadow-green-500/30 hover:-translate-y-1 transition-all duration-300"
                 >
                   Browse Jobs
-                  <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                  <ArrowRight className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1" />
                 </a>
               </div>
 
+
               <div className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-8">
-                <motion.div 
+                <motion.div
                   whileHover={{ y: -10 }}
                   className="card bg-base-200 shadow-xl border border-base-300 hover:border-[#14A800] transition-all duration-300"
                 >
@@ -120,7 +125,7 @@ function App() {
                   </div>
                 </motion.div>
 
-                <motion.div 
+                <motion.div
                   whileHover={{ y: -10 }}
                   className="card bg-base-200 shadow-xl border border-base-300 hover:border-[#14A800] transition-all duration-300"
                 >
@@ -133,7 +138,7 @@ function App() {
                   </div>
                 </motion.div>
 
-                <motion.div 
+                <motion.div
                   whileHover={{ y: -10 }}
                   className="card bg-base-200 shadow-xl border border-base-300 hover:border-[#14A800] transition-all duration-300"
                 >
@@ -151,7 +156,7 @@ function App() {
         </div>
 
         <TopCategories />
-        <RecentJob/>
+        <RecentJob />
       </main>
       <Footer />
     </div>
