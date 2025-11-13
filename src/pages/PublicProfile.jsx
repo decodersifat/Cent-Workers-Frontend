@@ -16,6 +16,11 @@ const PublicProfile = () => {
     
     const API_BASE = import.meta.env.VITE_BASE_URL;
 
+    // Helper function to check if a value is empty
+    const isEmpty = (value) => {
+        return !value || value.trim() === '';
+    };
+
     useEffect(() => {
         const loadData = async () => {
             const profileData = await fetchUserProfile();
@@ -50,14 +55,15 @@ const PublicProfile = () => {
                 const jobs = result.data || [];
                 setPostedJobs(jobs);
                 
-                // If profile doesn't have name/photo, try to get from first job
-                if (jobs.length > 0 && profileData && (!profileData.displayName || !profileData.photoURL)) {
+                // If profile doesn't have name/photo (empty strings or null/undefined), get from first job
+                if (jobs.length > 0 && profileData) {
                     const firstJob = jobs[0];
-                    setProfile(prev => ({
-                        ...prev,
-                        displayName: prev?.displayName || firstJob.postedBy || 'Anonymous User',
-                        photoURL: prev?.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(firstJob.postedBy || email)}&background=14A800&color=fff`
-                    }));
+                    const updatedProfile = {
+                        ...profileData,
+                        displayName: isEmpty(profileData.displayName) ? (firstJob.postedBy || 'Anonymous User') : profileData.displayName,
+                        photoURL: isEmpty(profileData.photoURL) ? null : profileData.photoURL
+                    };
+                    setProfile(updatedProfile);
                 }
             } else {
                 setPostedJobs([]);
@@ -106,7 +112,7 @@ const PublicProfile = () => {
                                 <div className="avatar">
                                     <div className="w-32 h-32 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
                                         <img 
-                                            src={profile?.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(profile?.displayName || email)}&background=14A800&color=fff`} 
+                                            src={!isEmpty(profile?.photoURL) ? profile.photoURL : `https://ui-avatars.com/api/?name=${encodeURIComponent(profile?.displayName || email)}&background=14A800&color=fff`} 
                                             alt={profile?.displayName || "User"} 
                                         />
                                     </div>
@@ -114,7 +120,7 @@ const PublicProfile = () => {
 
                                 <div className="flex-1">
                                     <h2 className="text-3xl font-bold mb-2">
-                                        {profile?.displayName || "Anonymous User"}
+                                        {!isEmpty(profile?.displayName) ? profile.displayName : "Anonymous User"}
                                     </h2>
                                     <p className="text-base-content/70 mb-2">{email}</p>
                                     
