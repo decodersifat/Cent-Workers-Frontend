@@ -16,6 +16,7 @@ function AllJobs() {
     const [sortOrder, setSortOrder] = useState('desc')
 
     const API = `${import.meta.env.VITE_BASE_URL}/api/v1/jobs/all-jobs`
+    const API_BASE = import.meta.env.VITE_BASE_URL
     const itemsPerPage = viewMode === 'grid' ? 12 : 10
 
     // Fetch all jobs
@@ -31,10 +32,6 @@ function AllJobs() {
                 // Handle different response formats
                 let jobsArray = Array.isArray(data) ? data : data.jobs || data.data || []
                 setJobs(jobsArray)
-
-                // Extract unique categories
-                const uniqueCategories = [...new Set(jobsArray.map(job => job.category))].filter(Boolean)
-                setCategories(uniqueCategories)
                 setError(null)
             } catch (err) {
                 console.error("Error fetching jobs:", err)
@@ -46,6 +43,29 @@ function AllJobs() {
         }
 
         fetchJobs()
+    }, [])
+
+    // Fetch categories from category collection
+    useEffect(() => {
+        const fetchCategories = async () => {
+            try {
+                const response = await fetch(`${API_BASE}/api/v1/category/all-categories`)
+                if (!response.ok) throw new Error(`API error: ${response.status}`)
+                const data = await response.json()
+                
+                if (data.success && data.data) {
+                    // Extract category titles from category objects
+                    const categoryTitles = data.data.map(cat => cat.title)
+                    setCategories(categoryTitles)
+                }
+            } catch (err) {
+                console.error("Error fetching categories:", err)
+                // Fallback to empty array if category fetch fails
+                setCategories([])
+            }
+        }
+
+        fetchCategories()
     }, [])
 
     const filteredJobs = jobs.filter(job => {

@@ -55,8 +55,8 @@ export default function AddJob() {
       }
 
       // Fetch user's categories
-      if (user?.uid) {
-        const userCatsResponse = await fetch(`${API_BASE}/api/v1/category/user-categories/${user.uid}`)
+      if (user?.email) {
+        const userCatsResponse = await fetch(`${API_BASE}/api/v1/category/user-categories/${user.email}`)
         if (userCatsResponse.ok) {
           const userCatsData = await userCatsResponse.json()
           // Backend returns { success, message, count, data: [...] }
@@ -85,7 +85,7 @@ export default function AddJob() {
       const urlSlug = newCategoryTitle.toLowerCase().replace(/\s+/g, "-")
       const categoryData = {
         title: newCategoryTitle,
-        uid: user.uid,
+        email: user.email,
         image: newCategoryImage || "https://via.placeholder.com/800?text=" + encodeURIComponent(newCategoryTitle),
         urlSlug: urlSlug
       }

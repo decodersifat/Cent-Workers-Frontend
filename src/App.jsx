@@ -111,46 +111,48 @@ function App() {
               </div>
 
 
-              <div className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-8">
+              <div className="mt-20 grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
                 <motion.div
-                  whileHover={{ y: -10 }}
-                  className="card bg-base-200 shadow-xl border border-base-300 hover:border-[#14A800] transition-all duration-300"
+                  whileHover={{ y: -10, scale: 1.03 }}
+                  className="bg-gradient-to-b from-base-200 to-base-100 shadow-lg border border-base-300 hover:border-[#14A800] hover:shadow-[#14A800]/30 rounded-2xl transition-all duration-300 flex flex-col items-center justify-center p-8"
                 >
-                  <div className="card-body items-center text-center">
-                    <div className="w-16 h-16 rounded-full bg-[#14A800]/10 flex items-center justify-center mb-4">
+                  <div className="flex flex-col items-center justify-center space-y-4">
+                    <div className="w-16 h-16 rounded-2xl bg-[#14A800]/10 flex items-center justify-center">
                       <TrendingUp className="w-8 h-8 text-[#14A800]" />
                     </div>
-                    <h3 className="card-title text-2xl font-bold text-base-content">10,000+</h3>
-                    <p className="text-base-content/70">Active Jobs</p>
+                    <h3 className="text-3xl font-bold text-base-content">10,000+</h3>
+                    <p className="text-base-content/70 text-lg">Active Jobs</p>
                   </div>
                 </motion.div>
 
                 <motion.div
-                  whileHover={{ y: -10 }}
-                  className="card bg-base-200 shadow-xl border border-base-300 hover:border-[#14A800] transition-all duration-300"
+                  whileHover={{ y: -10, scale: 1.03 }}
+                  className="bg-gradient-to-b from-base-200 to-base-100 shadow-lg border border-base-300 hover:border-purple-500 hover:shadow-purple-500/30 rounded-2xl transition-all duration-300 flex flex-col items-center justify-center p-8"
                 >
-                  <div className="card-body items-center text-center">
-                    <div className="w-16 h-16 rounded-full bg-purple-500/10 flex items-center justify-center mb-4">
+                  <div className="flex flex-col items-center justify-center space-y-4">
+                    <div className="w-16 h-16 rounded-2xl bg-purple-500/10 flex items-center justify-center">
                       <Sparkles className="w-8 h-8 text-purple-500" />
                     </div>
-                    <h3 className="card-title text-2xl font-bold text-base-content">5,000+</h3>
-                    <p className="text-base-content/70">Freelancers</p>
+                    <h3 className="text-3xl font-bold text-base-content">5,000+</h3>
+                    <p className="text-base-content/70 text-lg">Freelancers</p>
                   </div>
                 </motion.div>
 
                 <motion.div
-                  whileHover={{ y: -10 }}
-                  className="card bg-base-200 shadow-xl border border-base-300 hover:border-[#14A800] transition-all duration-300"
+                  whileHover={{ y: -10, scale: 1.03 }}
+                  className="bg-gradient-to-b from-base-200 to-base-100 shadow-lg border border-base-300 hover:border-blue-500 hover:shadow-blue-500/30 rounded-2xl transition-all duration-300 flex flex-col items-center justify-center p-8"
                 >
-                  <div className="card-body items-center text-center">
-                    <div className="w-16 h-16 rounded-full bg-blue-500/10 flex items-center justify-center mb-4">
+                  <div className="flex flex-col items-center justify-center space-y-4">
+                    <div className="w-16 h-16 rounded-2xl bg-blue-500/10 flex items-center justify-center">
                       <Zap className="w-8 h-8 text-blue-500" />
                     </div>
-                    <h3 className="card-title text-2xl font-bold text-base-content">98%</h3>
-                    <p className="text-base-content/70">Success Rate</p>
+                    <h3 className="text-3xl font-bold text-base-content">98%</h3>
+                    <p className="text-base-content/70 text-lg">Success Rate</p>
                   </div>
                 </motion.div>
               </div>
+
+
             </div>
           </div>
         </div>
