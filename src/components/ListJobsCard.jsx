@@ -18,7 +18,7 @@ function ListJobsCard( {job:job} ) {
 
             <div
                 key={job._id}
-                className='bg-white rounded-lg p-4 shadow-sm hover:shadow-md border border-border transition-all duration-200 flex gap-4 cursor-pointer hover:bg-accent/5'
+                className='bg-base-100 rounded-lg p-4 shadow-sm hover:shadow-md border border-border transition-all duration-200 flex gap-4 cursor-pointer hover:bg-accent/5'
             >
 
                 <div className='hidden sm:block w-32 h-24 shrink-0 rounded-lg overflow-hidden bg-muted'>

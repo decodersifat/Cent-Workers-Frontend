@@ -66,7 +66,7 @@ export default function RecentJob() {
                     </a>
 
                     {!loading && !error && (
-                        <div className='flex gap-2 bg-white border border-border rounded-lg p-1 shadow-sm'>
+                        <div className='flex gap-2 bg-base-100 border border-border rounded-lg p-1 shadow-sm'>
                             <button
                                 onClick={() => setViewMode('grid')}
                                 className={`p-2 rounded transition-all duration-200 ${viewMode === 'grid'

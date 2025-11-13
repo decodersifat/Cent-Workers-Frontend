@@ -16,7 +16,7 @@ function GridJobsCard({ job: job }) {
             <Link to={`/job-details/${job._id}`}>
             <div
                 key={job.id}
-                className='bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-lg border border-border transition-all duration-200 hover:-translate-y-1 cursor-pointer'
+                className='bg-base-100 rounded-lg overflow-hidden shadow-sm hover:shadow-lg border border-border transition-all duration-200 hover:-translate-y-1 cursor-pointer'
             >
 
                 <div className='h-40 overflow-hidden bg-muted'>

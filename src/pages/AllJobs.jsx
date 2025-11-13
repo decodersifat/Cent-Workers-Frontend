@@ -108,7 +108,7 @@ function AllJobs() {
                     </div>
 
                     {/* Search and Filters */}
-                    <div className='bg-white rounded-lg shadow-sm border border-border p-6 mb-8'>
+                    <div className='bg-base-100 rounded-lg shadow-sm border border-border p-6 mb-8'>
                         <div className='grid grid-cols-1 md:grid-cols-3 gap-4 mb-4'>
                             {/* Search Bar */}
                             <div className='relative md:col-span-2'>
@@ -150,14 +150,14 @@ function AllJobs() {
                         <div className='flex gap-2'>
                             <button
                                 onClick={() => setSortOrder(sortOrder === 'desc' ? 'asc' : 'desc')}
-                                className='flex items-center gap-2 bg-white border border-border rounded-lg px-4 py-2 shadow-sm hover:bg-accent/50 transition-colors'
+                                className='flex items-center gap-2 bg-base-100 border border-border rounded-lg px-4 py-2 shadow-sm hover:bg-accent/50 transition-colors'
                                 title={`Sort by ${sortOrder === 'desc' ? 'Oldest First' : 'Newest First'}`}
                             >
                                 <ArrowUpDown className='w-4 h-4' />
                                 <span className='text-sm font-medium'>{sortOrder === 'desc' ? 'Newest' : 'Oldest'}</span>
                             </button>
                             
-                            <div className='flex gap-2 bg-white border border-border rounded-lg p-1 shadow-sm'>
+                            <div className='flex gap-2 bg-base-100 border border-border rounded-lg p-1 shadow-sm'>
                                 <button
                                     onClick={() => setViewMode('grid')}
                                     className={`p-2 rounded transition-all duration-200 ${viewMode === 'grid'

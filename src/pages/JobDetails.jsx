@@ -167,8 +167,7 @@ function JobDetails() {
                                 Job Description
                             </div>
 
-
-                            <div className='bg-white rounded-lg p-6 shadow-sm border border-border space-y-4'>
+                            <div className='bg-base-100 rounded-lg p-6 shadow-sm border border-border space-y-4'>
                                 <p className='text-base text-foreground leading-relaxed'>
                                     {job.summary}
                                 </p>

@@ -167,7 +167,7 @@ export default function UpdateJob() {
                                     <select
                                         id="category"
                                         name="category"
-                                        className="w-full pl-10 pr-4 py-2 border border-input rounded-md bg-white focus:outline-none focus:ring-2 focus:ring-[#14A800]"
+                                        className="w-full pl-10 pr-4 py-2 border border-input rounded-md bg-base-100 focus:outline-none focus:ring-2 focus:ring-[#14A800]"
                                         value={formData.category}
                                         onChange={handleChange}
                                         required
