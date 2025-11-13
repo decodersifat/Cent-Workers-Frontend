@@ -184,11 +184,19 @@ export default function AddJob() {
       const jobData = {
         title: formData.title,
         postedBy: formData.postedBy,
-        category: formData.category,
+        category: formData.category, // This should be category title, not ID
         summary: formData.summary,
         coverImage: formData.coverImage,
         userEmail: user.email,
         uid: user.uid
+      }
+
+      // Find the category title from the ID
+      const selectedCategory = categories.find(c => c._id === formData.category) || 
+                               userCategories.find(c => c._id === formData.category)
+      
+      if (selectedCategory) {
+        jobData.category = selectedCategory.title
       }
 
       console.log("Job Data to be saved:", jobData)
