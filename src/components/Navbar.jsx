@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react"
-import { Menu, X, Briefcase, LogOut } from "lucide-react"
+import { Menu, X, Briefcase, LogOut, Moon, Sun } from "lucide-react"
 import useAuth from "@/hooks/useAuth"
+import useTheme from "@/hooks/useTheme"
 import { useNavigate } from "react-router"
 import toast from 'react-hot-toast'
 
 export default function Navbar() {
   const { user, signOutUser } = useAuth()
+  const { theme, toggleTheme } = useTheme()
   const navigate = useNavigate()
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isScrolled, setIsScrolled] = useState(false)
@@ -42,134 +44,136 @@ export default function Navbar() {
   ]
 
   return (
-    <nav className={`bg-white sticky top-0 z-50 transition-all duration-300 ${
-      isScrolled ? 'shadow-md border-b' : 'border-b border-border/40'
+    <nav className={`navbar bg-base-100 sticky top-0 z-50 shadow-lg backdrop-blur-md bg-opacity-90 transition-all duration-300 ${
+      isScrolled ? 'shadow-xl' : ''
     }`}>
-      <div className="container mx-auto px-4 lg:px-8">
-        <div className="flex items-center justify-between h-16 lg:h-18">
-        
-          <div className="shrink-0">
+      <div className="container mx-auto px-4">
+        <div className="flex items-center justify-between w-full h-16 lg:h-18">
+          <div className="flex items-center gap-4">
             <a href="/" className="flex items-center gap-2 group">
-              <div className="bg-[#14A800] p-2 rounded-lg group-hover:scale-105 transition-transform duration-200">
-                <Briefcase className="h-5 w-5 text-white" />
+              <div className="bg-gradient-to-r from-[#14A800] to-[#0f8000] p-2.5 rounded-xl group-hover:scale-110 transition-transform duration-300 shadow-lg">
+                <Briefcase className="h-6 w-6 text-white" />
               </div>
-              <span className="text-xl lg:text-2xl font-bold bg-linear-to-r from-[#14A800] to-[#0f8000] bg-clip-text text-transparent font-display tracking-tight">
+              <span className="text-xl lg:text-2xl font-bold bg-gradient-to-r from-[#14A800] to-[#0f8000] bg-clip-text text-transparent font-display tracking-tight hidden sm:block">
                 Cent Workers
               </span>
             </a>
           </div>
 
-          
-          <div className="hidden md:flex md:items-center md:gap-1 lg:gap-2">
+          <div className="hidden lg:flex lg:items-center lg:gap-2">
             {navLinks.map((link) => (
               <a
                 key={link.name}
                 href={link.href}
-                className="relative px-3 lg:px-4 py-2 text-sm lg:text-base font-medium text-foreground/80 hover:text-[#14A800] transition-colors duration-200 group"
+                className="btn btn-ghost btn-sm text-base-content hover:bg-[#14A800] hover:text-white transition-all duration-200"
               >
                 {link.name}
-                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-[#14A800] transition-all duration-200 group-hover:w-full"></span>
               </a>
             ))}
-            
+          </div>
+
+          <div className="flex items-center gap-3">
+            <button
+              onClick={toggleTheme}
+              className="btn btn-ghost btn-circle swap swap-rotate"
+              title={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
+            >
+              {theme === 'light' ? (
+                <Moon className="w-5 h-5" />
+              ) : (
+                <Sun className="w-5 h-5" />
+              )}
+            </button>
+
             {user ? (
-              <div className="flex items-center gap-3 ml-2 lg:ml-4">
-                <div className="group relative">
-                  <img 
-                    src={user.photoURL || 'https://via.placeholder.com/40'} 
-                    alt={user.displayName || 'User'}
-                    className="w-10 h-10 rounded-full border-2 border-[#14A800] cursor-pointer hover:scale-105 transition-transform"
-                  />
-                  <div className="absolute bottom-full right-0 mb-2 hidden group-hover:block bg-gray-900 text-white text-sm px-3 py-2 rounded-lg whitespace-nowrap z-50">
-                    {user.displayName || user.email}
+              <div className="hidden lg:flex items-center gap-3">
+                <div className="dropdown dropdown-end">
+                  <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar">
+                    <div className="w-10 rounded-full ring ring-[#14A800] ring-offset-base-100 ring-offset-2">
+                      <img 
+                        src={user.photoURL || 'https://via.placeholder.com/40'} 
+                        alt={user.displayName || 'User'}
+                      />
+                    </div>
                   </div>
+                  <ul tabIndex={0} className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow-lg bg-base-100 rounded-box w-52">
+                    <li className="menu-title">
+                      <span>{user.displayName || 'User'}</span>
+                      <span className="text-xs opacity-60">{user.email}</span>
+                    </li>
+                    <li><a href={`/profile/${user.uid}`}>My Profile</a></li>
+                    <li><a href="/my-added-jobs">My Jobs</a></li>
+                    <li><a href="/my-accepted-tasks">My Tasks</a></li>
+                    <li>
+                      <button onClick={handleLogout} className="text-error">
+                        <LogOut className="w-4 h-4" />
+                        Logout
+                      </button>
+                    </li>
+                  </ul>
                 </div>
-                <button
-                  onClick={handleLogout}
-                  className="flex items-center gap-2 bg-red-500 text-white px-5 lg:px-6 py-2 lg:py-2.5 rounded-lg hover:bg-red-600 transition-all duration-200 font-medium text-sm lg:text-base shadow-sm hover:shadow-md transform hover:scale-105"
-                >
-                  <LogOut className="w-4 h-4" />
-                  Logout
-                </button>
               </div>
             ) : (
               <a
                 href="/login"
-                className="ml-2 lg:ml-4 bg-[#14A800] text-white px-5 lg:px-6 py-2 lg:py-2.5 rounded-lg hover:bg-[#0f8000] transition-all duration-200 font-medium text-sm lg:text-base shadow-sm hover:shadow-md transform hover:scale-105"
+                className="hidden lg:flex btn btn-sm bg-gradient-to-r from-[#14A800] to-[#0f8000] text-white border-none hover:shadow-lg transition-all duration-200"
               >
                 Login/Register
               </a>
             )}
-          </div>
 
-        
-          <div className="md:hidden">
             <button
               onClick={toggleMenu}
-              className="text-foreground hover:text-[#14A800] focus:outline-none focus:ring-2 focus:ring-[#14A800]/20 rounded-lg p-2 transition-colors duration-200"
-              aria-label="Toggle menu"
+              className="lg:hidden btn btn-ghost btn-circle"
             >
-              {isMenuOpen ? (
-                <X className="h-6 w-6" />
-              ) : (
-                <Menu className="h-6 w-6" />
-              )}
+              {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
             </button>
           </div>
         </div>
 
-        
-        <div className={`md:hidden overflow-hidden transition-all duration-300 ease-in-out ${
-          isMenuOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
-        }`}>
-          <div className="py-4 space-y-1">
-            {navLinks.map((link) => (
-              <a
-                key={link.name}
-                href={link.href}
-                className="block px-4 py-2.5 text-base font-medium text-foreground/80 hover:text-[#14A800] hover:bg-accent/50 rounded-lg transition-all duration-200 transform hover:translate-x-1"
-                onClick={toggleMenu}
-              >
-                {link.name}
-              </a>
-            ))}
-            <div className="px-4 pt-2 space-y-2">
+        {isMenuOpen && (
+          <div className="lg:hidden py-4">
+            <ul className="menu bg-base-100 rounded-box">
+              {navLinks.map((link) => (
+                <li key={link.name}>
+                  <a href={link.href} onClick={toggleMenu}>
+                    {link.name}
+                  </a>
+                </li>
+              ))}
               {user ? (
                 <>
-                  <div className="flex items-center gap-3 p-3 bg-accent/50 rounded-lg">
-                    <img 
-                      src={user.photoURL || 'https://via.placeholder.com/40'} 
-                      alt={user.displayName || 'User'}
-                      className="w-10 h-10 rounded-full border-2 border-[#14A800]"
-                    />
-                    <div className="flex-1">
-                      <p className="font-medium text-foreground">{user.displayName || 'User'}</p>
-                      <p className="text-xs text-muted-foreground">{user.email}</p>
+                  <li className="menu-title">
+                    <div className="flex items-center gap-3 p-3">
+                      <img 
+                        src={user.photoURL || 'https://via.placeholder.com/40'} 
+                        alt={user.displayName || 'User'}
+                        className="w-10 h-10 rounded-full ring ring-[#14A800] ring-offset-2"
+                      />
+                      <div>
+                        <p className="font-medium">{user.displayName || 'User'}</p>
+                        <p className="text-xs opacity-60">{user.email}</p>
+                      </div>
                     </div>
-                  </div>
-                  <button
-                    onClick={() => {
-                      handleLogout()
-                      toggleMenu()
-                    }}
-                    className="flex items-center justify-center gap-2 w-full bg-red-500 text-white px-6 py-2.5 rounded-lg hover:bg-red-600 transition-all duration-200 font-medium text-center shadow-sm hover:shadow-md"
-                  >
-                    <LogOut className="w-4 h-4" />
-                    Logout
-                  </button>
+                  </li>
+                  <li><a href={`/profile/${user.uid}`} onClick={toggleMenu}>My Profile</a></li>
+                  <li>
+                    <button onClick={() => { handleLogout(); toggleMenu(); }} className="text-error">
+                      <LogOut className="w-4 h-4" />
+                      Logout
+                    </button>
+                  </li>
                 </>
               ) : (
-                <a
-                  href="/login"
-                  className="block w-full bg-[#14A800] text-white px-6 py-2.5 rounded-lg hover:bg-[#0f8000] transition-all duration-200 font-medium text-center shadow-sm hover:shadow-md transform hover:scale-[1.02]"
-                  onClick={toggleMenu}
-                >
-                  Login/Register
-                </a>
+                <li>
+                  <a href="/login" onClick={toggleMenu} className="btn btn-primary">
+                    Login/Register
+                  </a>
+                </li>
               )}
-            </div>
+            </ul>
           </div>
-        </div>
+        )}
       </div>
     </nav>
   )
