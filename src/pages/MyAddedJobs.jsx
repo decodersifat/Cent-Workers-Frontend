@@ -23,9 +23,7 @@ function MyAddedJobs() {
         try {
             setLoading(true)
             setError(null)
-            const response = await fetch(`${API_BASE}/api/v1/jobs/myAddedJobs/${user.email}`, {
-                method: 'POST'
-            })
+            const response = await fetch(`${API_BASE}/api/v1/jobs/myAddedJobs/${user.email}`)
             
             if (!response.ok) {
                 throw new Error('Failed to load jobs')
