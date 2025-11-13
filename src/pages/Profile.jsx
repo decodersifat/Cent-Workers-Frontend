@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
-import { useAuth } from "../hooks/useAuth";
+import { useParams, useNavigate } from "react-router";
+import useAuth from "../hooks/useAuth";
 import toast from "react-hot-toast";
 import { MapPin, Briefcase, Calendar, Edit, Save, X } from "lucide-react";
 import { motion } from "framer-motion";
@@ -54,14 +54,19 @@ const Profile = () => {
 
     const fetchUserJobs = async () => {
         try {
-            const response = await fetch(`https://cent-workers-backend.vercel.app/api/v1/jobs?buyerEmail=${uid}`);
+            // Use the correct endpoint for fetching user's jobs
+            const response = await fetch(`https://cent-workers-backend.vercel.app/api/v1/jobs/myAddedJobs/${uid}`);
             const result = await response.json();
             
             if (result.success) {
                 setPostedJobs(result.data || []);
+            } else {
+                // If no jobs found, just set empty array (not an error)
+                setPostedJobs([]);
             }
         } catch (error) {
             console.error("Error fetching jobs:", error);
+            setPostedJobs([]);
         } finally {
             setLoading(false);
         }
@@ -69,14 +74,19 @@ const Profile = () => {
 
     const fetchAcceptedJobs = async () => {
         try {
-            const response = await fetch(`https://cent-workers-backend.vercel.app/api/v1/accepted-jobs?acceptedByEmail=${uid}`);
+            // Use the correct endpoint for fetching accepted jobs
+            const response = await fetch(`https://cent-workers-backend.vercel.app/api/v1/accepted-jobs/my-accepted-jobs/${uid}`);
             const result = await response.json();
             
             if (result.success) {
                 setAcceptedJobs(result.data || []);
+            } else {
+                // If no jobs found, just set empty array (not an error)
+                setAcceptedJobs([]);
             }
         } catch (error) {
             console.error("Error fetching accepted jobs:", error);
+            setAcceptedJobs([]);
         }
     };
 

@@ -1,12 +1,6 @@
-import { useContext } from 'react'
-import ThemeContext from '../contexts/ThemeContext'
+// Re-export the useTheme hook from ThemeProvider for consistency
+export { useTheme } from '../contexts/ThemeProvider'
 
-const useTheme = () => {
-    const context = useContext(ThemeContext)
-    if (!context) {
-        throw new Error('useTheme must be used within ThemeProvider')
-    }
-    return context
-}
-
+// Default export for backward compatibility
+import { useTheme } from '../contexts/ThemeProvider'
 export default useTheme
