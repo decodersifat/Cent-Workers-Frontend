@@ -107,7 +107,7 @@ export default function Navbar() {
                     {/* Menu Items */}
                     <div className="py-2">
                       <a
-                        href={`/profile/${user.uid}`}
+                        href={`/profile/${user.email}`}
                         className="flex items-center gap-3 px-4 py-2.5 text-sm text-base-content hover:bg-[#14A800]/10 hover:text-[#14A800] transition-colors duration-200"
                       >
                         <User className="w-4 h-4" />
@@ -195,7 +195,7 @@ export default function Navbar() {
                   </div>
 
                   <a
-                    href={`/profile/${user.uid}`}
+                    href={`/profile/${user.email}`}
                     onClick={toggleMenu}
                     className="flex items-center gap-3 px-4 py-2.5 text-sm text-base-content hover:bg-[#14A800]/10 hover:text-[#14A800] rounded-md transition-colors duration-200"
                   >

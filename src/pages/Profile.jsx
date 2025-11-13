@@ -6,7 +6,7 @@ import { MapPin, Briefcase, Calendar, Edit, Save, X } from "lucide-react";
 import { motion } from "framer-motion";
 
 const Profile = () => {
-    const { uid } = useParams();
+    const { uid } = useParams(); // uid param is actually the user's email
     const { user } = useAuth();
     const navigate = useNavigate();
     const [profile, setProfile] = useState(null);
@@ -23,7 +23,7 @@ const Profile = () => {
         location: ""
     });
 
-    const isOwnProfile = user?.uid === uid;
+    const isOwnProfile = user?.email === uid; // Compare with email
 
     useEffect(() => {
         fetchUserProfile();

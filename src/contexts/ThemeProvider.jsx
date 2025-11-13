@@ -27,10 +27,12 @@ export function ThemeProvider({
         : "light"
 
       root.classList.add(systemTheme)
+      root.setAttribute("data-theme", systemTheme)
       return
     }
 
     root.classList.add(theme)
+    root.setAttribute("data-theme", theme)
   }, [theme])
 
   const value = {
